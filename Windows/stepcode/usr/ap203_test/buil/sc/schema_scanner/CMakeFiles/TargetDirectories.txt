@@ -1,3 +1,0 @@
-F:/VS2019/XXX-StepCode/Windows/stepcode/usr/ap203_test/buil/sc/schema_scanner/CMakeFiles/schema_scanner.dir
-F:/VS2019/XXX-StepCode/Windows/stepcode/usr/ap203_test/buil/sc/schema_scanner/CMakeFiles/ALL_BUILD.dir
-F:/VS2019/XXX-StepCode/Windows/stepcode/usr/ap203_test/buil/sc/schema_scanner/CMakeFiles/ZERO_CHECK.dir
