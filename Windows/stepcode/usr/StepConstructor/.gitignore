@@ -1,2 +1,5 @@
 /build
-/build/*
+*.kdev4
+.kdev_include_paths
+/out/build
+/out/*

@@ -3,7 +3,7 @@
 project ("StepConstructor")
 
 
-set(STEPCODE_ROOT_DIR "D:\\Program\\VS2013\\001-JapanSystem\\XXX-StepCode\\Windows\\stepcode\\")
+set(STEPCODE_ROOT_DIR "F:\\VS2019\\XXX-StepCode\\STEPCodeDemo\\Windows\\stepcode\\")
 
 # Set STEPCODE_ROOT_DIR to point to the root of the STEPcode source tree.
 if(NOT DEFINED STEPCODE_ROOT_DIR)

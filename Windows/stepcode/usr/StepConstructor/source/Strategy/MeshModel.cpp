@@ -2,6 +2,7 @@
 #include		"MeshModel.h"
 #include		<sdai.h>
 #include		<schema.h>
+#include <STEPaggrReal.h>
 
 using namespace Strategy;
 

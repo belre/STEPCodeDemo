@@ -1,4 +1,4 @@
-
+#pragma comment( lib, "gdiplus.lib" )
 
 #include	<iostream>
 #include	<numeric>
