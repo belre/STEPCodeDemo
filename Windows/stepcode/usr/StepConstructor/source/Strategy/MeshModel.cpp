@@ -2,8 +2,8 @@
 #include		"MeshModel.h"
 #include		<sdai.h>
 #include		<schema.h>
-#include <STEPaggrReal.h>
-
+#include		<STEPaggrReal.h>
+#include		<boost/graph/graphviz.hpp>
 using namespace Strategy;
 
 #include		"GraphDefinitionForBoost.h"
@@ -167,4 +167,56 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 }
 
 
+void MeshModel::ExportGraph(string path)
+{
+	std::ofstream ofs(path);
 
+	if(!ofs) 
+	{
+		return;
+	}
+
+	
+	auto vertices = _graph.m_vertices;
+	auto edges = _graph.m_edges;
+
+	for( auto iter_vertice = vertices.begin(); iter_vertice != vertices.end(); iter_vertice++) {
+		auto vertice = *iter_vertice;
+
+		std::string vertice_coord;
+		vertice.m_property._Point.Format(vertice_coord);
+
+		ofs << "Vertex," << vertice.m_property._fileid << "," << vertice_coord << std::endl;
+	}
+
+	for(auto iter_edge = edges.begin(); iter_edge != edges.end(); iter_edge++) 
+	{
+		auto edge = *iter_edge;
+
+		std::string source_coord;
+		_graph[edge.m_source]._Point.Format(source_coord);
+
+		std::string target_coord;
+		_graph[edge.m_target]._Point.Format(target_coord);
+
+		std::string line_type;
+		if(edge.get_property()._geometry->GetType() == ECURVEEDGE_STYLES::EDGE_LINE) 
+		{
+			auto ptr = dynamic_cast<LineEdgeGeometry*>(edge.get_property()._geometry);
+			ofs << "Line,Circle," << _graph[edge.m_source]._fileid << "," << _graph[edge.m_target]._fileid << std::endl;
+		}
+		else if(edge.get_property()._geometry->GetType() == ECURVEEDGE_STYLES::EDGE_CIRCLE)
+		{
+			auto ptr = dynamic_cast<CircleEdgeGeometry*>(edge.get_property()._geometry);
+			ofs << "Edge,Circle," << _graph[edge.m_source]._fileid << "," << _graph[edge.m_target]._fileid << ",";
+			ofs << ptr->_center0.ToString() << ","
+					<< ptr->_radius << ","
+					<< ptr->_first_ref_vector.ToString() << ","
+					<< ptr->_second_ref_vector.ToString() << ","
+					<< ptr->_normal_vector.ToString()	<< std::endl;
+		}
+	}
+
+
+
+}

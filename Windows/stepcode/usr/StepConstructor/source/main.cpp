@@ -40,8 +40,8 @@ int main(int argv, char** argc)
 		std::cerr << "StepConstructor.exe test.stp ./" << std::endl;
 		std::cerr << "**************************" << std::endl << std::endl;
 
-		steppath = "D:\\StepData\\KANA_NK35B10D9_K.stp";
-		exportpath = "D:\\StepData\\";
+		steppath = "F:\\StepData\\KANA_NK35B10D9_K.stp";
+		exportpath = "F:\\StepData\\";
 	} else if (argv <= 3) {
 		steppath = string(argc[1]);
 		exportpath = string(argc[2]);
@@ -76,6 +76,8 @@ int main(int argv, char** argc)
 	if (meshmodel.ParseSTEPFile(*sfile, *instance_list, jsonsetting_ptree) != 0) {
 		return -1;
 	}
+
+	meshmodel.ExportGraph(steppath + ".csv");
 	
 
 

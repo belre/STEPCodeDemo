@@ -25,6 +25,7 @@ namespace Strategy {
 		~MeshModel();
 
 		int ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::property_tree::ptree& jsonsetting );
+		void ExportGraph(string path);
 	};
 
 

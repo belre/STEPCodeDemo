@@ -157,6 +157,27 @@ namespace Strategy {
 			}
 			std::cout << std::endl;
 		}
+
+		void Format(std::string& format_text) {
+			std::stringstream ss_str;
+			ss_str << "[";
+			for (int i = 0; i < this->_coordinate.size(); i++) {
+				ss_str << this->_coordinate[i];
+
+				if(i != this->_coordinate.size() - 1) {
+					ss_str << ",";
+				}
+			}
+			ss_str << "]";
+
+			format_text = ss_str.str();
+		}
+
+		std::string ToString() {
+			std::string str;
+			Format(str);
+			return str;
+		}
 	};
 
 	class VertexElement {
@@ -167,8 +188,8 @@ namespace Strategy {
 
 
 	typedef enum class CurveEdge_Styles {
-		EDGE_LINE,
-		EDGE_CIRCLE
+		EDGE_LINE = 1,
+		EDGE_CIRCLE = 2
 	} ECURVEEDGE_STYLES;
 
 
