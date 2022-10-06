@@ -1,0 +1,21 @@
+{
+	"STEPExtractor" :  
+	{
+		"radius" : 13.0
+	} ,
+	"ZPlotting" : 
+	{
+		"lower_z" : 0.0,
+		"upper_z" : 4.3,
+		"resolution_z" : 0.1,
+		"rotation_frequency" : 2074,
+		"base_r" : 12.5,
+		"camera_X0" : 63.6,
+		"camera_Y0" : 0,
+		"camera_Theta0_deg" : 0,
+		"surfacerange_Rl" : -2,
+		"surfacerange_Ru" : 6,
+		"surfacerange_Ll" : -0.1,
+		"surfacerange_Lu" : 6
+	}
+}
