@@ -18,6 +18,7 @@ namespace Strategy {
 		const double ROI_LOWER_RADIUS = 28.0;
 		const double MIN_ERROR = 1e-10;
 		STEPMeshGraph _graph;
+		std::map<int, STEPMeshGraph::edge_descriptor> _closed_loop;
 
 	public:
 		MeshModel();

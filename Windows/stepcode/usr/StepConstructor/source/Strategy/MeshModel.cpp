@@ -110,6 +110,9 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 				auto oriented_edge_inst = dynamic_cast<const SdaiOriented_edge*>(aggr_node->node);
 				std::cout << oriented_edge_inst->FileId() << ",";
 
+				auto edge_element = oriented_edge_inst->edge_element_();
+
+
 
 				aggr_node = dynamic_cast<const EntityNode*>(aggr_node->NextNode());
 			}
@@ -177,8 +180,6 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 					LineEdgeGeometry* geometry = new LineEdgeGeometry();
 					graph[e12]._geometry = geometry; //LineEdgeGeometry();
 				}
-
-				//std::cout << (int)(graph[e12]._geometry.GetType()) << std::endl;
 			}
 		}
 	}

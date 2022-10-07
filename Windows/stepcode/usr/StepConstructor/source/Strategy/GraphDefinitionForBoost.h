@@ -230,12 +230,6 @@ namespace Strategy {
 	};
 
 
-
-
-
-
-
-
 	class PropertyElement {
 	public:
 		std::string _name;
