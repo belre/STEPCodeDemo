@@ -204,6 +204,8 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 			auto aggr_list = e_loop_path->edge_list_();
 			auto aggr_node = dynamic_cast<const EntityNode*>(aggr_list->GetHead());
 
+			std::vector<int> loop_tmp;
+
 			for (int i = 0; i < aggr_list->EntryCount(); i++)
 			{
 				auto oriented_edge_inst = dynamic_cast<const SdaiOriented_edge*>(aggr_node->node);
@@ -211,7 +213,11 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 
 				AddCurve(graph, vertex_list, edgecurve_inst);
 				aggr_node = dynamic_cast<const EntityNode*>(aggr_node->NextNode());
+
+				loop_tmp.push_back(edgecurve_inst->FileId());
 			}
+
+			_closed_loop[fileid] = loop_tmp;
 		}
 	}
 
@@ -283,5 +289,24 @@ void MeshModel::ExportGraph(string path)
 				_graph[edge.m_source]._fileid << "," <<
 				_graph[edge.m_target]._fileid << std::endl;
 		}
+	}
+
+	for( auto iter_loop = _closed_loop.begin(); iter_loop != _closed_loop.end(); iter_loop++) 
+	{
+		ofs << "Loop,";
+		ofs << iter_loop->first << ",";
+
+		auto iter_vec = iter_loop->second;
+
+		for(auto iter_int_vec = iter_vec.begin() ; iter_int_vec != iter_vec.end(); iter_int_vec++) 
+		{
+			ofs << *iter_int_vec;
+			if(iter_int_vec != iter_vec.end() - 1) 
+			{
+				ofs << ",";
+			}
+		}
+
+		ofs << std::endl;
 	}
 }
