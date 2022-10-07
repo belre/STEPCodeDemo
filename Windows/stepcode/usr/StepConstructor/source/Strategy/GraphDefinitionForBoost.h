@@ -188,6 +188,7 @@ namespace Strategy {
 
 
 	typedef enum class CurveEdge_Styles {
+		UNDEFINED = 0,
 		EDGE_LINE = 1,
 		EDGE_CIRCLE = 2
 	} ECURVEEDGE_STYLES;
@@ -207,13 +208,14 @@ namespace Strategy {
 		}
 	public:
 		virtual ECURVEEDGE_STYLES GetType() {
-			return CurveEdge_Styles::EDGE_LINE;
+			return CurveEdge_Styles::UNDEFINED;
 		}
 	};
 
 
 	class EdgeElement {
 	public:
+		int _file_id;
 		std::string _name;
 		EdgeCurveGeometry* _geometry;	
 
@@ -227,6 +229,10 @@ namespace Strategy {
 			//}
 		}
 
+		bool operator == (const EdgeElement& element) const
+		{
+			return this->_geometry == element._geometry;
+		}
 	};
 
 

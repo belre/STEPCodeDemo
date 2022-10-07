@@ -7,6 +7,10 @@
 #include		<boost/property_tree/json_parser.hpp>
 #include		<boost/optional.hpp>
 
+#include		<sdai.h>
+#include		<schema.h>
+#include		<STEPaggrReal.h>
+
 namespace Strategy {
 
 
@@ -26,7 +30,13 @@ namespace Strategy {
 		~MeshModel();
 
 		int ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::property_tree::ptree& jsonsetting );
+
 		void ExportGraph(string path);
+
+	private:
+
+		Vector3d SwapAxisPoint(Vector3d org);
+		void AddCurve(STEPMeshGraph& graph, std::vector<STEPMeshGraph::vertex_descriptor>& vertex_list, const SdaiEdge_curve* edgecurve_inst);
 	};
 
 
