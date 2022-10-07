@@ -2,6 +2,7 @@
 #include		"MeshModel.h"
 #include		<sdai.h>
 #include		<schema.h>
+#include		"entity/SdaiRepresentation_item.h"
 #include		<STEPaggrReal.h>
 #include		<boost/graph/graphviz.hpp>
 using namespace Strategy;
@@ -92,18 +93,39 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 		int fileid = inst->FileId();
 
 		const SdaiEdge_curve* edgecurve_inst = dynamic_cast<SdaiEdge_curve*>(inst);
-		if (edgecurve_inst != NULL) {
+		const SdaiEdge_loop* edgeloop_inst = dynamic_cast<SdaiEdge_loop*>(inst);
+
+		if( edgeloop_inst != nullptr) {
+			const SdaiLabel name = edgeloop_inst->name_();
+
+			SdaiPath* e_loop_path = dynamic_cast<SdaiPath*>(inst->GetNextMiEntity());
+			auto aggr_list = e_loop_path->edge_list_();
+
+			auto aggr_node = dynamic_cast<const EntityNode*>(aggr_list->GetHead());
+
+			std::cout << fileid << ",";
+
+			for(int i = 0 ; i < aggr_list->EntryCount(); i ++)
+			{
+				auto oriented_edge_inst = dynamic_cast<const SdaiOriented_edge*>(aggr_node->node);
+				std::cout << oriented_edge_inst->FileId() << ",";
+
+
+				aggr_node = dynamic_cast<const EntityNode*>(aggr_node->NextNode());
+			}
+
+			std::cout << std::endl;
+		}
+		else if (edgecurve_inst != NULL) {
 			const SdaiVertex* vertex_start = edgecurve_inst->edge_start_();
 			const SdaiVertex_point* vertexPoint_start = dynamic_cast<const SdaiVertex_point*>(vertex_start);
 			const SdaiCartesian_point* cartesian_start = dynamic_cast<const SdaiCartesian_point*>(vertexPoint_start->vertex_geometry_());
-
 
 			const SdaiVertex* vertex_end = edgecurve_inst->edge_end_();
 			const SdaiVertex_point* vertexPoint_end = dynamic_cast<const SdaiVertex_point*>(vertex_end);
 			const SdaiCartesian_point* cartesian_end = dynamic_cast<const SdaiCartesian_point*>(vertexPoint_end->vertex_geometry_());
 
 			const SdaiCircle* curve_circle_geometry = dynamic_cast<const SdaiCircle*>(edgecurve_inst->edge_geometry_());
-
 
 			auto iter_seek_vertex_start = find_if(vertex_list.begin(), vertex_list.end(), [vertex_start, graph](STEPMeshGraph::vertex_descriptor& dsc) { return graph[dsc]._fileid == vertex_start->FileId(); });
 			auto iter_seek_vertex_end = find_if(vertex_list.begin(), vertex_list.end(), [vertex_end, graph](STEPMeshGraph::vertex_descriptor& dsc) { return graph[dsc]._fileid == vertex_end->FileId(); });

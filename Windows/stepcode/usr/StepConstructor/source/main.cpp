@@ -69,7 +69,7 @@ int main(int argv, char** argc)
 
 	// STEPfile takes care of reading and writing Part 21 files
 	STEPfile* sfile = new STEPfile(*registry, *instance_list, steppath, false);
-	
+
 	// Construct vertex and mesh based on STEP File
 	STEPMeshGraph graph;
 	MeshModel meshmodel;
