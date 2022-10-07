@@ -214,7 +214,7 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 				AddCurve(graph, vertex_list, edgecurve_inst);
 				aggr_node = dynamic_cast<const EntityNode*>(aggr_node->NextNode());
 
-				loop_tmp.push_back(edgecurve_inst->FileId());
+				loop_tmp.push_back(edgecurve_inst->edge_geometry_()->FileId());
 			}
 
 			_closed_loop[fileid] = loop_tmp;
