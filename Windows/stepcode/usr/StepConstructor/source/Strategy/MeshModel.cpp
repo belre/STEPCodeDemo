@@ -294,7 +294,7 @@ void MeshModel::ExportGraph(string path)
 	for( auto iter_loop = _closed_loop.begin(); iter_loop != _closed_loop.end(); iter_loop++) 
 	{
 		ofs << "Loop,";
-		ofs << iter_loop->first << ",";
+		ofs << iter_loop->first << ",[";
 
 		auto iter_vec = iter_loop->second;
 
@@ -307,6 +307,6 @@ void MeshModel::ExportGraph(string path)
 			}
 		}
 
-		ofs << std::endl;
+		ofs << "]" << std::endl;
 	}
 }
