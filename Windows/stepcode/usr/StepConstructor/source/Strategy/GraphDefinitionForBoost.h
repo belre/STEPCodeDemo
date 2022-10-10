@@ -162,7 +162,7 @@ namespace Strategy {
 			std::stringstream ss_str;
 			ss_str << "[";
 			for (int i = 0; i < this->_coordinate.size(); i++) {
-				ss_str << this->_coordinate[i];
+				ss_str << std::fixed << this->_coordinate[i];
 
 				if(i != this->_coordinate.size() - 1) {
 					ss_str << ",";

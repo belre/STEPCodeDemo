@@ -249,7 +249,7 @@ void MeshModel::ExportGraph(string path)
 		std::string vertice_coord;
 		vertice.m_property._Point.Format(vertice_coord);
 
-		ofs << "Vertex," << vertice.m_property._fileid << "," << vertice_coord << std::endl;
+		ofs << "Vertex," << std::fixed << vertice.m_property._fileid << "," << vertice_coord << std::endl;
 	}
 
 	for (auto iter_edge = edges.begin(); iter_edge != edges.end(); iter_edge++)
