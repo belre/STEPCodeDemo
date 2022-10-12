@@ -36,6 +36,7 @@ void MeshModel::AddCurve(STEPMeshGraph &graph, std::vector<STEPMeshGraph::vertex
 
 		const SdaiCircle* curve_circle_geometry = dynamic_cast<const SdaiCircle*>(edgecurve_inst->edge_geometry_());
 		const SdaiLine* curve_line_geometry = dynamic_cast<const SdaiLine*>(edgecurve_inst->edge_geometry_());
+		const SdaiB_spline_curve_with_knots* curve_spline = dynamic_cast<const SdaiB_spline_curve_with_knots*>(edgecurve_inst->edge_geometry_());
 
 		auto iter_seek_vertex_start = find_if(vertex_list.begin(), vertex_list.end(), [vertex_start, graph](STEPMeshGraph::vertex_descriptor& dsc) { return graph[dsc]._fileid == vertex_start->FileId(); });
 		auto iter_seek_vertex_end = find_if(vertex_list.begin(), vertex_list.end(), [vertex_end, graph](STEPMeshGraph::vertex_descriptor& dsc) { return graph[dsc]._fileid == vertex_end->FileId(); });
@@ -59,14 +60,13 @@ void MeshModel::AddCurve(STEPMeshGraph &graph, std::vector<STEPMeshGraph::vertex
 				return;
 			}
 
-
 			// The specified curve-geometrical instance 
 			if (curve_circle_geometry != nullptr) 
 			{
 				boost::tie(e12, inserted) = add_edge(*iter_seek_vertex_start, *iter_seek_vertex_end, graph);
 
 				const SdaiAxis2_placement* selector = dynamic_cast<const SdaiAxis2_placement*>(curve_circle_geometry->position_());
-				if (selector == NULL)
+				if (selector == nullptr)
 				{
 					return;
 				}
@@ -104,6 +104,42 @@ void MeshModel::AddCurve(STEPMeshGraph &graph, std::vector<STEPMeshGraph::vertex
 
 				graph[e12]._geometry = geometry;
 				graph[e12]._file_id = curve_circle_geometry->FileId();
+			}
+			else if (curve_spline != nullptr) 
+			{
+				auto list = curve_spline->control_points_list_();
+				auto list_head_node = list->GetHead();
+				auto list_tail_node = list->GetHead();
+				for(int i = 0; i < list->EntryCount() - 1; i++) 
+				{
+					list_tail_node = list_tail_node->NextNode();
+				}
+
+				auto list_head_entity_node = dynamic_cast<const EntityNode*>(list_head_node);
+				auto list_tail_entity_node = dynamic_cast<const EntityNode*>(list_tail_node);
+
+				const SdaiCartesian_point* list_head_cartesian = nullptr;
+				if(list_head_entity_node != nullptr) 
+				{
+					list_head_cartesian = dynamic_cast<const SdaiCartesian_point*>(list_head_entity_node->node);
+				}
+
+				const SdaiCartesian_point* list_tail_cartesian = nullptr;
+				if(list_tail_entity_node != nullptr) 
+				{
+					list_tail_cartesian = dynamic_cast<const SdaiCartesian_point*>(list_tail_entity_node->node);
+				}
+
+				if( list_head_cartesian != nullptr && list_tail_cartesian != nullptr ) 
+				{
+					uint32_t head_id = list_head_cartesian->FileId();
+					uint32_t tail_id = list_tail_cartesian->FileId();
+					boost::tie(e12, inserted) = add_edge(*iter_seek_vertex_start, *iter_seek_vertex_end, graph);
+
+					EdgeCurveGeometry* geometry = new EdgeCurveGeometry();
+					graph[e12]._geometry = geometry;
+					graph[e12]._file_id = curve_spline->FileId();
+				}
 			}
 			else if(curve_line_geometry != nullptr)
 			{
@@ -154,13 +190,15 @@ int MeshModel::ParseSTEPFile(STEPfile& file, InstMgr& instance_list, boost::prop
 
 		// Extract all coordinates from vertex_Point
 		const SdaiVertex_point* vertex_inst = dynamic_cast<SdaiVertex_point*>(inst);
-		if (vertex_inst == nullptr) {
+		if (vertex_inst == nullptr) 
+		{
 			continue;
 		}
 
 		// Get Attributes and refer cartesian Vector3d
 		const SdaiCartesian_point* attr_cartesianPoint = dynamic_cast<const SdaiCartesian_point*>(vertex_inst->vertex_geometry_());
-		if (attr_cartesianPoint == nullptr) {
+		if (attr_cartesianPoint == nullptr) 
+		{
 			continue;
 		}
 
@@ -239,9 +277,6 @@ void MeshModel::ExportGraph(string path)
 	
 	auto vertices = _graph.m_vertices;
 	auto edges = _graph.m_edges;
-
-
-
 
 	for (auto iter_vertice = vertices.begin(); iter_vertice != vertices.end(); iter_vertice++) {
 		auto vertice = *iter_vertice;
